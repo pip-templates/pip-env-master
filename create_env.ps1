@@ -17,24 +17,24 @@ $rootPath = $PSScriptRoot
 if ($rootPath -eq "") { $rootPath = "." }
 
 # Create k8s cluster
-. "$($rootPath)/cloud/install_k8s.ps1" $ConfigPath
+. "$($rootPath)/src/install_k8s.ps1" $ConfigPath
 # Check for error
 if ($LastExitCode -ne 0) {
     Write-Error "Can't create k8s cluster. Watch logs above."
 }
 
-# Create mongo cluster
-. "$($rootPath)/cloud/install_mongo.ps1" $ConfigPath
+# Create db cluster
+. "$($rootPath)/src/install_db.ps1" $ConfigPath
 # Check for error
 if ($LastExitCode -ne 0) {
-    Write-Error "Can't create mongo cluster. Watch logs above."
+    Write-Error "Can't create db cluster. Watch logs above."
 }
 
-# Peer mongo 
-. "$($rootPath)/cloud/peer_mongo.ps1" $ConfigPath
+# Peer db 
+. "$($rootPath)/src/peer_db.ps1" $ConfigPath
 # Check for error
 if ($LastExitCode -ne 0) {
-    Write-Error "Can't peer mongo cluster. Watch logs above."
+    Write-Error "Can't peer db cluster. Watch logs above."
 }
 
 # Install k8s components

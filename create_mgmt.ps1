@@ -21,7 +21,7 @@ $config = Read-EnvConfig -Path $ConfigPath
 $resources = Read-EnvResources -Path $ConfigPath
 
 # Create mgmt station
-. "$($rootPath)/cloud/create_mgmt.ps1" $ConfigPath
+. "$($rootPath)/src/create_mgmt.ps1" $ConfigPath
 # Check for error
 if ($LastExitCode -ne 0) {
     Write-Error "Can't create management station. "

@@ -1,6 +1,7 @@
 
 /config/*
 !/config/*config.example*
+!/config/.gitkeep
 
 /temp
-!/temp/dummy.txt
+!/temp/.gitkeep
