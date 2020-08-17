@@ -15,3 +15,5 @@ if ($rootPath -eq "") { $rootPath = "." }
 . "$($rootPath)/lib/include.ps1"
 $rootPath = $PSScriptRoot
 if ($rootPath -eq "") { $rootPath = "." }
+
+# Todo: Insert here mgmt station creation...

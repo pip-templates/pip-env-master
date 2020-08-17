@@ -15,3 +15,7 @@ if ($rootPath -eq "") { $rootPath = "." }
 . "$($rootPath)/lib/include.ps1"
 $rootPath = $PSScriptRoot
 if ($rootPath -eq "") { $rootPath = "." }
+
+# Todo: Insert here k8s creation...
+
+# Todo: Insert here db creation...
