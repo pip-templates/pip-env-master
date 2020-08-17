@@ -73,9 +73,11 @@ For example, you need AKS (azure kubernetes service) and cloud couchbase.
 2. Copy *config/config.example.json* to *config* folder and rename it accordingly to your environment, for example *config.pip-stage.json*
 3. Download the [AKS template](https://github.com/pip-templates/pip-templates-env-aks)
 4. Copy *src* and *templates* folder from AKS template to master template 
-5. Copy content of *config/config.k8s.json.add* to *config.pip-stage.json*
-6. Download the [cloud couchbase template](https://github.com/pip-templates/pip-templates-db-cloud)
-7. Copy *src* and *templates* folder from AKS template to master template 
-8. Copy content of *config/config.db.json.add* to *config.pip-stage.json*
+5. Add content of *.ps1.add* files to correspondent files from master template
+6. Add content of *config/config.k8s.json.add* to *config.pip-stage.json*
+7. Download the [cloud couchbase template](https://github.com/pip-templates/pip-templates-db-cloud)
+8. Copy *src* and *templates* folder from couchbase template to master template 
+9. Add content of *.ps1.add* files to correspondent files from master template
+10. Add content of *config/config.db.json.add* to *config.pip-stage.json*
 
 Now you are ready to execute environment management scripts.
