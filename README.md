@@ -1,7 +1,7 @@
 # Overview
 
+This is a master template for scripted environment management.
 The Environment Management scripts are used to create, update or delete operating environments.
-The environments support types: cloud. 
 Depending on requirements, they can be used for development, testing and production.
 
 The scriptable environments follow "Infrastructure as a Code" principles and allow to:
@@ -10,9 +10,11 @@ The scriptable environments follow "Infrastructure as a Code" principles and all
 * Minimize differences between environments
 * Provide developers with environment to run and test their components integrated into the final system and expand their area of responsibilities
 
-To have full environment magament you need to follow the [Combine kubernetes and database template](#combine-kubernetes-and-database-template) instructions
+Environment management templates separated by their functions and platforms - aws/azure cloud providers, kubernetes clusters, database clusters (mongodb, couchbase). They all stored on [github](https://github.com/pip-templates)
 
 # Usage
+
+Before you can use environment management scripts you need to get build-in templates and put them to master template. You can view how to do it in [Example of combining kubernetes and database template](#combine-kubernetes-and-database-template).
 
 Environment management scripts should be executed from management station. Management station can be created by create_mgmt.ps1 script
 
@@ -22,13 +24,13 @@ Environment management scripts should be executed from management station. Manag
 
 This script will create cloud virtual machine and copy environment management project to /home/ubuntu/pip-templates-envmgmt
 
-Before you can run environment management scripts you must install prerequisites. That step is required to be done once:
+Then you need to install prerequisites on management station. That step is required to be done once:
 
 `
 ./install_prereq_<os>.ps1
 `
 
-To create a new environment prepare an environment configuration file (see below) and execute the following script:
+To create a new environment prepare an [environment configuration file](#configuration-file) and execute the following script:
 
 `
 ./create_env.ps1 -c <path to config file>
@@ -37,29 +39,45 @@ To create a new environment prepare an environment configuration file (see below
 As the result, the script will create the environment following your spec and place addresses of the created resources
 into a resource file in the same folder where config file is located.
 
-Deleting environment can be done as:
+Deleting environment can be done by:
 
 `
 ./destroy_env.ps1 -c <path to config file>
 `
 
 It is possible to execute individual phases of the process by running specific scripts.
-For instance, you can create only kubernetes cluster or database, or install kubernetes components by running scripts from *cloud* folder by executing script with -c parameter.
+For instance, you can create only kubernetes cluster or database, or install kubernetes components by running scripts from *src* folder by executing script with -c parameter.
 
 # Project structure
-This is a blank template for environment management, so it stores only root scripts and lib folder, all other folders and scripts stored in pip-templates repositories on github.
+
+Master templates should be completed by build-in templates with actual scripts (src folder) and other files.
+
 | Folder | Description |
 |----|----|
+| Src | Scripts related to management cloud environment. |  
+| Config | Config files for scripts. Store *example* configs for each environment, recommendation is not change this files with actual values, set actual values in duplicate config files without *example* in name. Also stores *resources* files, created automaticaly. | 
 | Lib | Scripts with support functions like working with configs, templates etc. | 
+| Temp | Folder for storing automatically created temporary files. | 
+| Templates | Folder for storing templates, such as kubernetes yml files, cloudformation templates, etc. | 
+
+# Configuration file
+
+Master template have json config file with common values for all build-in templates, but before executing scripts it must be completed by *config/*.json.add* files, which stored in build-in template repository.
+Description of config variables stored in build-in README.md files.
 
 # Combine kubernetes and database template
 
-Environment management templates separated by their functions and platforms - aws/azure cloud providers, kubernetes clusters, database clusters (mongodb, couchbase). They all stored on https://github.com/pip-templates 
-
 For example, you need AKS (azure kubernetes service) and cloud couchbase.
-1. Download the entire template https://github.com/pip-templates/pip-templates-env-aks and copy all folders except *lib* to pip-template-env-blank. 
-2. Next we need copy directories and files from https://github.com/pip-templates/pip-templates-db-cloud
-cloud script files from directory “cloud”
-manually copy unique variables from “config.example”
-templates files from directory “templates”
-3. Make sure that root scripts (create_env/delete_env) corresponds to *cloud* scripts (by default pip-templates-env-black root scripts calling mongo db scripts).
+
+1. Download [master template](https://github.com/pip-templates/pip-templates-env-master)
+2. Copy *config/config.example.json* to *config* folder and rename it accordingly to your environment, for example *config.pip-stage.json*
+3. Download the [AKS template](https://github.com/pip-templates/pip-templates-env-aks)
+4. Copy *src* and *templates* folder from AKS template to master template 
+5. Add content of *.ps1.add* files to correspondent files from master template
+6. Add content of *config/config.k8s.json.add* to *config.pip-stage.json*
+7. Download the [cloud couchbase template](https://github.com/pip-templates/pip-templates-db-cloud)
+8. Copy *src* and *templates* folder from couchbase template to master template 
+9. Add content of *.ps1.add* files to correspondent files from master template
+10. Add content of *config/config.db.json.add* to *config.pip-stage.json*
+
+Now you are ready to execute environment management scripts.

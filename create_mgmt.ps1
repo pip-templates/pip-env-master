@@ -16,13 +16,4 @@ if ($rootPath -eq "") { $rootPath = "." }
 $rootPath = $PSScriptRoot
 if ($rootPath -eq "") { $rootPath = "." }
 
-# Read config and resources
-$config = Read-EnvConfig -Path $ConfigPath
-$resources = Read-EnvResources -Path $ConfigPath
-
-# Create mgmt station
-. "$($rootPath)/cloud/create_mgmt.ps1" $ConfigPath
-# Check for error
-if ($LastExitCode -ne 0) {
-    Write-Error "Can't create management station. "
-}
+# Todo: Insert here mgmt station creation...

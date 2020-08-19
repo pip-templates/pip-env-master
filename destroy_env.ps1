@@ -16,23 +16,6 @@ if ($rootPath -eq "") { $rootPath = "." }
 $rootPath = $PSScriptRoot
 if ($rootPath -eq "") { $rootPath = "." }
 
-# Destroy k8s cluster
-. "$($rootPath)/cloud/destroy_k8s.ps1" $ConfigPath
-# Check for error
-if ($LastExitCode -ne 0) {
-    Write-Error "Can't destroy k8s. Watch logs above."
-}
+# Todo: Insert here k8s destroying...
 
-# Unpeer mongo 
-. "$($rootPath)/cloud/unpeer_mongo.ps1" $ConfigPath
-# Check for error
-if ($LastExitCode -ne 0) {
-    Write-Error "Can't unpeer mongo cluster. Watch logs above."
-}
-
-# Destroy mongo cluster
-. "$($rootPath)/cloud/destroy_mongo.ps1" $ConfigPath
-# Check for error
-if ($LastExitCode -ne 0) {
-    Write-Error "Can't destroy mongo cluster. Watch logs above."
-}
+# Todo: Insert here db destroying...
