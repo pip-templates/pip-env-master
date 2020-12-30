@@ -40,3 +40,35 @@ function ConvertObjectToHashtable
         }
     }
 }
+
+
+function ConvertOutputToResources
+{
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true, Position=0)]
+        [Array[]] $Outputs
+    )
+
+    # define keys fo key and value 
+    $keyParam = 'OutputKey'
+    $valueParam = 'OutputValue'
+    $newOutputs = New-Object System.Collections.Hashtable
+
+    if ($null -eq $Outputs) { 
+        Write-Host 'Outputs is null'
+
+        return $null 
+    }
+
+    foreach($item in $Outputs) {
+        $newKey = ($item | Select-Object -ExpandProperty $keyParam)
+        $newValue =  ($item | Select-Object -ExpandProperty $valueParam)
+
+        if ($null -ne $newKey) {
+            $newOutputs[$newKey] = $newValue
+        }
+    } 
+ 
+    return $newOutputs
+}
