@@ -1,4 +1,4 @@
-function ConvertObjectToHashtable 
+function ConvertTo-EnvHashtable 
 {
     [CmdletBinding()]
     param 
@@ -18,7 +18,7 @@ function ConvertObjectToHashtable
         {
             $collection = 
             @(
-                foreach ($object in $InputObject) { ConvertObjectToHashtable $object }
+                foreach ($object in $InputObject) { ConvertTo-EnvHashtable $object }
             )
 
             Write-Output -NoEnumerate $collection
@@ -29,7 +29,7 @@ function ConvertObjectToHashtable
 
             foreach ($property in $InputObject.PSObject.Properties) 
             {
-                $hash[$property.Name] = ConvertObjectToHashtable $property.Value
+                $hash[$property.Name] = ConvertTo-EnvHashtable $property.Value
             }
 
             $hash
@@ -42,33 +42,33 @@ function ConvertObjectToHashtable
 }
 
 
-function ConvertOutputToResources
+function Get-EnvAwsOutput
 {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$true, Position=0)]
-        [Array[]] $Outputs
+        [Array[]] $InputObject
     )
 
     # define keys fo key and value 
     $keyParam = 'OutputKey'
     $valueParam = 'OutputValue'
-    $newOutputs = New-Object System.Collections.Hashtable
+    $result = New-Object System.Collections.Hashtable
 
-    if ($null -eq $Outputs) { 
+    if ($null -eq $InputObject) { 
         Write-Host 'Outputs is null'
 
         return $null 
     }
 
-    foreach($item in $Outputs) {
+    foreach($item in $InputObject) {
         $newKey = ($item | Select-Object -ExpandProperty $keyParam)
         $newValue =  ($item | Select-Object -ExpandProperty $valueParam)
 
         if ($null -ne $newKey) {
-            $newOutputs[$newKey] = $newValue
+            $result[$newKey] = $newValue
         }
     } 
  
-    return $newOutputs
+    return $result
 }

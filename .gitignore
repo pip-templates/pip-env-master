@@ -1,7 +1,8 @@
-
 /config/*
-!/config/*config.example*
-!/config/.gitkeep
+!/config/default_config.json
 
 /temp/*
 !/temp/.gitkeep
+
+/logs/*
+!/logs/.gitkeep

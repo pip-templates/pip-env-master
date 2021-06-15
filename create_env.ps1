@@ -2,20 +2,41 @@
 
 param
 (
-    [Alias("c", "Path")]
+    [Alias("c", "Config")]
     [Parameter(Mandatory=$true, Position=0)]
-    [string] $ConfigPath
+    [string] $ConfigPath,
+
+    [Alias("r", "Resources")]
+    [Parameter(Mandatory=$false, Position=1)]
+    [string] $ResourcePath
 )
 
+# Stop on error
 $ErrorActionPreference = "Stop"
 
-# Load support functions
+# Load common functions
 $rootPath = $PSScriptRoot
 if ($rootPath -eq "") { $rootPath = "." }
-. "$($rootPath)/lib/include.ps1"
+. "$($rootPath)/common/include.ps1"
 $rootPath = $PSScriptRoot
 if ($rootPath -eq "") { $rootPath = "." }
 
-# Todo: Insert here k8s creation...
+# Set default parameter values
+if (($ResourcePath -eq $null) -or ($ResourcePath -eq ""))
+{
+    $ResourcePath = ConvertTo-EnvResourcePath -ConfigPath $ConfigPath
+}
 
-# Todo: Insert here db creation...
+###################################################################
+# Record environment information
+. "$($rootPath)/environment/create.ps1" -ConfigPath $ConfigPath -ConfigPrefix "environment" -ResourcePath $ResourcePath -ResourcePrefix "environment"
+###################################################################
+
+
+# TODO: INSERT ANY COMPONENT HERE
+
+
+###################################################################
+# Lock config & resource file versions (by backing up to "./config/archive")
+    . "$($rootPath)/environment/version-control/create.ps1" -ConfigPath $ConfigPath -ConfigPrefix "environment" -ResourcePath $ResourcePath -ResourcePrefix "environment"
+###################################################################

@@ -9,7 +9,7 @@ function ConvertFrom-EnvTemplate
         [Parameter(Mandatory=$false, Position=2)]
         [hashtable] $Params2 = @{},
         [Parameter(Mandatory=$false, Position=3)]
-        [switch] $Secret
+        [switch] $Base64
     )
 
     $params = @{}
@@ -30,7 +30,7 @@ function ConvertFrom-EnvTemplate
         $Template = $matches.post
         $key = $matches.key.Trim()
         $value = $params[$key] + ""
-        if ($Secret) {
+        if ($Base64) {
             $value = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($value))
         }
         $output += $matches.pre + $value
@@ -40,6 +40,7 @@ function ConvertFrom-EnvTemplate
     $output = $output -replace "`r", [environment]::newline 
     Write-Output $output
 }
+
 
 function Build-EnvTemplate
 {
@@ -54,13 +55,13 @@ function Build-EnvTemplate
         [Parameter(Mandatory=$false, Position=3)]
         [hashtable] $Params2 = @{},
         [Parameter(Mandatory=$false, Position=4)]
-        [switch] $Secret
+        [switch] $Base64
     )
 
     $template = Get-Content -Path $InputPath | Out-String
     if ($template -ne "") {
-        if ($Secret) {
-            $value = ConvertFrom-EnvTemplate -Template $template -Params1 $Params1 -Params2 $Params2 -Secret 
+        if ($Base64) {
+            $value = ConvertFrom-EnvTemplate -Template $template -Params1 $Params1 -Params2 $Params2 -Base64 
         } else {
             $value = ConvertFrom-EnvTemplate -Template $template -Params1 $Params1 -Params2 $Params2
         }

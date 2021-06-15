@@ -2,20 +2,39 @@
 
 param
 (
-    [Alias("c", "Path")]
-    [Parameter(Mandatory=$false, Position=0)]
-    [string] $ConfigPath
+    [Alias("c", "Config")]
+    [Parameter(Mandatory=$true, Position=0)]
+    [string] $ConfigPath,
+
+    [Alias("r", "Resources")]
+    [Parameter(Mandatory=$false, Position=1)]
+    [string] $ResourcePath
 )
 
+# Stop on error
 $ErrorActionPreference = "Stop"
 
-# Load support functions
+# Load common functions
 $rootPath = $PSScriptRoot
 if ($rootPath -eq "") { $rootPath = "." }
-. "$($rootPath)/lib/include.ps1"
+. "$($rootPath)/common/include.ps1"
 $rootPath = $PSScriptRoot
 if ($rootPath -eq "") { $rootPath = "." }
 
-# Todo: Insert here k8s destroying...
+# Set default parameter values
+if (($ResourcePath -eq $null) -or ($ResourcePath -eq ""))
+{
+    $ResourcePath = ConvertTo-EnvResourcePath -ConfigPath $ConfigPath
+}
 
-# Todo: Insert here db destroying...
+###################################################################
+# Record environment information
+. "$($rootPath)/environment/delete.ps1" -ConfigPath $ConfigPath -ConfigPrefix "environment" -ResourcePath $ResourcePath -ResourcePrefix "environment"
+###################################################################
+
+# TODO: INSERT ANY COMPONENT HERE
+
+###################################################################
+# Try to delete (move to "archive/deleted") archived config & resource file versions
+    . "$($rootPath)/environment/version-control/delete.ps1" -ConfigPath $ConfigPath -ConfigPrefix "environment" -ResourcePath $ResourcePath -ResourcePrefix "environment"
+###################################################################

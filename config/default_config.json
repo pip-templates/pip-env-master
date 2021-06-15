@@ -1,0 +1,8 @@
+{
+    "docker": {
+        "registry": "ghcr.io",
+        "username": "XXXXX",
+        "password": "XXXX",
+        "email": "XXXX.XXXX@gmail.com"
+      }
+}
