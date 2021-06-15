@@ -9,11 +9,13 @@ function Read-EnvConfig
         [string] $ConfigPath
     )
 
-    if (($ConfigPath -eq $null) -or ($ConfigPath -eq "")) {
+    if (($ConfigPath -eq $null) -or ($ConfigPath -eq "")) 
+    {
         throw "Config path is not set. Execute <script>.ps1 -Config <config file>"
     }
 
-    if (-not (Test-Path -Path $ConfigPath)) {
+    if (-not (Test-Path -Path $ConfigPath)) 
+    {
         throw "Config path $($ConfigPath) was not found"
     }
 
@@ -68,10 +70,12 @@ function Read-EnvResources
     )
     
     # If resources do not exist yet return an empty result
-    if (($ResourcePath -eq $null) -or ($ResourcePath -eq "")) {
+    if (($ResourcePath -eq $null) -or ($ResourcePath -eq "")) 
+    {
         return @{}
     }
-    if (-not (Test-Path -Path $ResourcePath)) {
+    if (-not (Test-Path -Path $ResourcePath)) 
+    {
         return @{}
     }
 

@@ -55,7 +55,8 @@ function Get-EnvAwsOutput
     $valueParam = 'OutputValue'
     $result = New-Object System.Collections.Hashtable
 
-    if ($null -eq $InputObject) { 
+    if ($null -eq $InputObject) 
+    { 
         Write-Host 'Outputs is null'
 
         return $null 
@@ -65,7 +66,8 @@ function Get-EnvAwsOutput
         $newKey = ($item | Select-Object -ExpandProperty $keyParam)
         $newValue =  ($item | Select-Object -ExpandProperty $valueParam)
 
-        if ($null -ne $newKey) {
+        if ($null -ne $newKey) 
+        {
             $result[$newKey] = $newValue
         }
     } 

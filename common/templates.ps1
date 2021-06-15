@@ -30,7 +30,8 @@ function ConvertFrom-EnvTemplate
         $Template = $matches.post
         $key = $matches.key.Trim()
         $value = $params[$key] + ""
-        if ($Base64) {
+        if ($Base64) 
+        {
             $value = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($value))
         }
         $output += $matches.pre + $value
@@ -59,8 +60,10 @@ function Build-EnvTemplate
     )
 
     $template = Get-Content -Path $InputPath | Out-String
-    if ($template -ne "") {
-        if ($Base64) {
+    if ($template -ne "") 
+    {
+        if ($Base64) 
+        {
             $value = ConvertFrom-EnvTemplate -Template $template -Params1 $Params1 -Params2 $Params2 -Base64 
         } else {
             $value = ConvertFrom-EnvTemplate -Template $template -Params1 $Params1 -Params2 $Params2

@@ -14,19 +14,27 @@ function Get-EnvMapValue
     $obj = $map
 
     foreach ($name in $names) {
-        if ($obj -eq $null) {
+        if ($obj -eq $null) 
+        {
             break
-        } elseif ($obj -is [array]) {
+        } 
+        elseif ($obj -is [array]) 
+        {
             $index = [convert]::ToInt32($name, 10)
             $obj = $obj[$index]
-        } elseif ($obj -is [hashtable]) {
+        } 
+        elseif ($obj -is [hashtable]) 
+        {
             $obj = $obj[$name]
-        } else {
+        } 
+        else 
+        {
             throw "Cannot get value by key $name. The parent property must be an array or hashtable"
         }
     }
 
-    if ($obj -eq $null) {
+    if ($obj -eq $null) 
+    {
         $obj = $Default
     }
 
@@ -47,27 +55,36 @@ function Set-EnvMapValue
 
     $names = $key.Split('.')
 
-    if ($names.Length -le 1) {
-        if ($map -is [array]) {
+    if ($names.Length -le 1) 
+    {
+        if ($map -is [array]) 
+        {
             $index = [convert]::ToInt32($key, 10)
             $map[$key] = $value
-        } else {
+        } 
+        else 
+        {
             $map[$key] = $value
         } 
         return
     }
 
     $name = $names[0]
-    if ($map -is [array]) {
+    if ($map -is [array]) 
+    {
         $index = [convert]::ToInt32($name, 10)
         $nestedMap = $map[$index]
-        if ($nestedMap -eq $null) {
+        if ($nestedMap -eq $null) 
+        {
             $nestedMap = @{}
             $map[$index] = $nestedMap
         }
-    } else {
+    } 
+    else 
+    {
         $nestedMap = $map[$name]
-        if ($nestedMap -eq $null) {
+        if ($nestedMap -eq $null) 
+        {
             $nestedMap = @{}
             $map[$name] = $nestedMap
         }
@@ -86,27 +103,39 @@ function Get-EnvMapKeys
     )
 
     $keys = @()
-    if ($map -is [array]) {
-        for ($index = 0; $index -lt $map.Length; $index++) {
+    if ($map -is [array]) 
+    {
+        for ($index = 0; $index -lt $map.Length; $index++) 
+        {
             $nestedMap = $map[$index]
             $nestedKeys = Get-EnvMapKeys -Map $nestedMap
-            if ($nestedKeys.Length -eq 0) {
+            if ($nestedKeys.Length -eq 0) 
+            {
                 $keys = $keys + $index.ToString()
-            } else {
+            } 
+            else 
+            {
                 foreach ($nestedKey in $nestedKeys) {
                     $key = $index.ToString() + "." + $nestedKey
                     $keys = $keys + $key
                 }
             }
         }
-    } elseif ($map -is [hashtable]) {
-        foreach ($key in $map.Keys) {
+    } 
+    elseif ($map -is [hashtable]) 
+    {
+        foreach ($key in $map.Keys) 
+        {
             $nestedMap = $map[$key]
             $nestedKeys = Get-EnvMapKeys -Map $nestedMap
-            if ($nestedKeys.Length -eq 0) {
+            if ($nestedKeys.Length -eq 0) 
+            {
                 $keys = $keys + $key
-            } else {
-                foreach ($nestedKey in $nestedKeys) {
+            } 
+            else 
+            {
+                foreach ($nestedKey in $nestedKeys) 
+                {
                     $compoundKey = $key + "." + $nestedKey
                     $keys = $keys + $compoundKey
                 }
@@ -128,20 +157,27 @@ function Set-EnvMapDefault
         [object] $Default
     )
 
-    if ($Default -is [hashtable]) {
-        if (-not ($Map -is [hashtable])) {
+    if ($Default -is [hashtable]) 
+    {
+        if (-not ($Map -is [hashtable])) 
+        {
             return
         }
 
-        foreach ($key in $Default.Keys) {
+        foreach ($key in $Default.Keys) 
+        {
             $mapValue = $map[$key]
             $defaultValue = $default[$key]
 
             if ($mapValue -eq $null) {
                 $map[$key] = $defaultValue
-            } elseif ($mapValue -is [array] -and $mapValue.Length -eq 0) {
+            } 
+            elseif ($mapValue -is [array] -and $mapValue.Length -eq 0) 
+            {
                 $map[$key] = $defaultValue
-            } elseif ($mapValue -is [hashtable]) {
+            } 
+            elseif ($mapValue -is [hashtable]) 
+            {
                 Set-EnvMapDefault -Map $mapValue -Default $defaultValue
             }
         }
@@ -158,30 +194,40 @@ function Test-EnvMapValue
         [string] $Key
     )
 
-    if ($map -eq $null) {
+    if ($map -eq $null) 
+    {
         Write-Output $false
         return
     }
 
     $names = $key.Split('.')
 
-    if ($names.Length -le 1) {
-        if ($map -is [array]) {
+    if ($names.Length -le 1) 
+    {
+        if ($map -is [array]) 
+        {
             $index = [convert]::ToInt32($key, 10)
             Write-Output $map.Length -gt $index
-        } elseif ($map -is [hashtable]) {
+        } 
+        elseif ($map -is [hashtable]) 
+        {
             Write-Output $map.ContainsKey($key)
-        } else {
+        } 
+        else 
+        {
             Write-Output $false
         } 
         return
     }
 
     $name = $names[0]
-    if ($map -is [array]) {
+    if ($map -is [array]) 
+    {
         $index = [convert]::ToInt32($name, 10)
         $nestedMap = $map[$index]
-    } else {
+    } 
+    else 
+    {
         $nestedMap = $map[$name]
     } 
 
@@ -200,24 +246,30 @@ function Remove-EnvMapValue
         [string] $Key
     )
 
-    if ($map -eq $null) {
+    if ($map -eq $null) 
+    {
         return
     }
 
     $names = $key.Split('.')
 
-    if ($names.Length -le 1) {
-        if ($map -is [hashtable]) {
+    if ($names.Length -le 1) 
+    {
+        if ($map -is [hashtable]) 
+        {
             $map.Remove($key)
         } 
         return
     }
 
     $name = $names[0]
-    if ($map -is [array]) {
+    if ($map -is [array]) 
+    {
         $index = [convert]::ToInt32($name, 10)
         $nestedMap = $map[$index]
-    } else {
+    } 
+    else 
+    {
         $nestedMap = $map[$name]
     } 
 
